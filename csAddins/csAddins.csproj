@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateElement.cs" />
     <Compile Include="MyAddin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

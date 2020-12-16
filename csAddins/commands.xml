@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<KeyinTree xmlns="http://www.bentley.com/schemas/1.0/MicroStation/AddIn/KeyinTree.xsd">
+	<RootKeyinTable ID="root">
+		<Keyword SubtableRef="CreateElement"
+				CommandClass="MacroCommand" CommandWord="csAddins" >
+			<Options Required ="true"/>
+		</Keyword>
+	</RootKeyinTable>
+
+	<SubKeyinTables>
+		<KeyinTable ID="CreateElement">
+			<Keyword SubtableRef="Commands" CommandWord="CreateElement">
+				<Options Required ="true"/>
+			</Keyword>
+		</KeyinTable>
+		<KeyinTable ID="Commands">
+			<Keyword CommandWord="LineAndLineString"> </Keyword>
+			<Keyword CommandWord="ShapeAndComplexShape"> </Keyword>
+			<Keyword CommandWord="TextAndTextNode"> </Keyword>
+			<Keyword CommandWord="CellAndSharedCell"> </Keyword>
+			<Keyword CommandWord="LinearAndAngularDimension"> </Keyword>
+			<Keyword CommandWord="CurveAndBsplineCurve"> </Keyword>
+			<Keyword CommandWord="ConeAndBsplineSurface"> </Keyword>
+		</KeyinTable>
+	</SubKeyinTables>
+
+	<KeyinHandlers>
+		<KeyinHandler Keyin="csAddins CreateElement LineAndLineString"
+			Function="csAddins.CreateElement.LineAndLineString"/>
+		<KeyinHandler Keyin="csAddins CreateElement ShapeAndComplexShape"
+			Function="csAddins.CreateElement.ShapeAndComplexShape"/>
+		<KeyinHandler Keyin="csAddins CreateElement TextAndTextNode"
+			Function="csAddins.CreateElement.TextAndTextNode"/>
+		<KeyinHandler Keyin="csAddins CreateElement CellAndSharedCell"
+			Function="csAddins.CreateElement.CellAndSharedCell"/>
+		<KeyinHandler Keyin="csAddins CreateElement LinearAndAngularDimension"
+			Function="csAddins.CreateElement.LinearAndAngularDimension"/>
+		<KeyinHandler Keyin="csAddins CreateElement CurveAndBsplineCurve"
+			Function="csAddins.CreateElement.CurveAndBsplineCurve"/>
+		<KeyinHandler Keyin="csAddins CreateElement ConeAndBsplineSurface"
+			Function="csAddins.CreateElement.ConeAndBsplineSurface"/>
+	</KeyinHandlers>
+</KeyinTree>

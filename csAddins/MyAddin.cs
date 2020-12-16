@@ -5,6 +5,8 @@ using System.Windows.Forms;
 
 namespace csAddins
 {
+    [Bentley.MicroStation.AddInAttribute
+                 (KeyinTree = "csAddins.commands.xml", MdlTaskID = "CSADDINS")]
     internal sealed class MyAddin : Bentley.MicroStation.AddIn
     {
         private MyAddin(System.IntPtr mdlDesc)
@@ -13,16 +15,6 @@ namespace csAddins
         }
         protected override int Run(string[] commandLine)
         {
-            //MessageBox.Show("Hello World");
-            //string sWinFrameworkPath = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
-            //MessageBox.Show("Framework Path =" + sWinFrameworkPath);
-            CreateElement.LineAndLineString();
-            CreateElement.ShapeAndComplexShape();
-            CreateElement.TextAndTextNode();
-            CreateElement.CellAndSharedCell();
-            CreateElement.LinearAndAngularDimension();
-            CreateElement.CurveAndBsplineCurve();
-            CreateElement.ConeAndBsplineSurface();
             return 0;
         }
     }

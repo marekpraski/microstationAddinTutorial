@@ -8,7 +8,7 @@ namespace csAddins
 {
     class CreateElement
     {
-        public static void LineAndLineString()
+        public static void LineAndLineString(string unparsed)
         {
             Application app = Utilities.ComApp;
             Point3d startPnt = app.Point3dZero();
@@ -28,7 +28,7 @@ namespace csAddins
             oLine.Color = 1; oLine.LineWeight = 2;
             app.ActiveModelReference.AddElement(oLine);
         }
-        public static void ShapeAndComplexShape()
+        public static void ShapeAndComplexShape(string unparsed)
         {
             Application app = Utilities.ComApp;
             Point3d[] pntArray = new Point3d[6];
@@ -52,7 +52,7 @@ namespace csAddins
             oComplexShape.Color = 1; oComplexShape.LineWeight = 2;
             app.ActiveModelReference.AddElement(oComplexShape);
         }
-        public static void TextAndTextNode()
+        public static void TextAndTextNode(string unparsed)
         {
             Application app = Utilities.ComApp;
             double savedTextHeight = app.ActiveSettings.TextStyle.Height;
@@ -82,7 +82,7 @@ namespace csAddins
             app.ActiveSettings.TextStyle.Font = savedFont;
             app.ActiveSettings.AnnotationScaleEnabled = savedAnnotationScaleEnabled;
         }
-        public static void CellAndSharedCell()
+        public static void CellAndSharedCell(string unparsed)
         {
             Application app = Utilities.ComApp;
             app.AttachCellLibrary("sample2.cel", MsdConversionMode.Always);
@@ -105,7 +105,7 @@ namespace csAddins
                 app.ActiveModelReference.AddElement(oSC);
             }
         }
-        public static void LinearAndAngularDimension()
+        public static void LinearAndAngularDimension(string unparsed)
         {
             Application app = Utilities.ComApp;
             DimensionStyle ds = app.ActiveSettings.DimensionStyle;
@@ -135,7 +135,7 @@ namespace csAddins
             oDim.Color = 1; oDim.DimHeight = 1;
             app.ActiveModelReference.AddElement(oDim);
         }
-        public static void CurveAndBsplineCurve()
+        public static void CurveAndBsplineCurve(string unparsed)
         {
             Application app = Utilities.ComApp;
             Point3d[] pntArray = new Point3d[5];
@@ -156,7 +156,7 @@ namespace csAddins
             oBsplineCurve.Color = 1; oBsplineCurve.LineWeight = 2;
             app.ActiveModelReference.AddElement(oBsplineCurve);
         }
-        public static void ConeAndBsplineSurface()
+        public static void ConeAndBsplineSurface(string unparsed)
         {
             Application app = Utilities.ComApp;
             Point3d basePt = app.Point3dFromXYZ(2, -23, 0);

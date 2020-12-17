@@ -12,6 +12,9 @@
 			<Keyword SubtableRef="Commands" CommandWord="CreateElement">
 				<Options Required ="true"/>
 			</Keyword>
+			<Keyword SubtableRef="DemoForm" CommandWord="DemoForm">
+				<Options Required="true"/>
+			</Keyword>
 		</KeyinTable>
 		<KeyinTable ID="Commands">
 			<Keyword CommandWord="LineAndLineString"> </Keyword>
@@ -21,6 +24,12 @@
 			<Keyword CommandWord="LinearAndAngularDimension"> </Keyword>
 			<Keyword CommandWord="CurveAndBsplineCurve"> </Keyword>
 			<Keyword CommandWord="ConeAndBsplineSurface"> </Keyword>
+		</KeyinTable>
+		<KeyinTable ID="DemoForm">
+			<Keyword CommandWord="Toolbar"/>
+			<Keyword CommandWord="Modal"/>
+			<Keyword CommandWord="TopLevel"/>
+			<Keyword CommandWord="ToolSettings"/>
 		</KeyinTable>
 	</SubKeyinTables>
 
@@ -39,5 +48,13 @@
 			Function="csAddins.CreateElement.CurveAndBsplineCurve"/>
 		<KeyinHandler Keyin="csAddins CreateElement ConeAndBsplineSurface"
 			Function="csAddins.CreateElement.ConeAndBsplineSurface"/>
+		<KeyinHandler Keyin="csAddins DemoForm Toolbar" 
+				Function="csAddins.DemoForm.Toolbar"/>
+		<KeyinHandler Keyin="csAddins DemoForm Modal" 
+				Function="csAddins.DemoForm.Modal"/>
+		<KeyinHandler Keyin="csAddins DemoForm TopLevel" 
+				Function="csAddins.DemoForm.TopLevel"/>
+		<KeyinHandler Keyin="csAddins DemoForm ToolSettings" 
+				Function="csAddins.DemoForm.ToolSettings"/>
 	</KeyinHandlers>
 </KeyinTree>

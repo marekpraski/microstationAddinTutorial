@@ -30,6 +30,7 @@
 			<Keyword CommandWord="Modal"/>
 			<Keyword CommandWord="TopLevel"/>
 			<Keyword CommandWord="ToolSettings"/>
+			<Keyword CommandWord="LevelChanged"/>
 		</KeyinTable>
 	</SubKeyinTables>
 
@@ -56,5 +57,7 @@
 				Function="csAddins.DemoForm.TopLevel"/>
 		<KeyinHandler Keyin="csAddins DemoForm ToolSettings" 
 				Function="csAddins.DemoForm.ToolSettings"/>
+		<KeyinHandler Keyin="csAddins DemoForm LevelChanged" 
+				Function="csAddins.DemoForm.LevelChanged"/>
 	</KeyinHandlers>
 </KeyinTree>

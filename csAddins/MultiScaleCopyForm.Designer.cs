@@ -166,12 +166,12 @@ namespace csAddins
 
         #endregion
 
-        private System.Windows.Forms.TextBox tbScale;
+        public System.Windows.Forms.TextBox tbScale;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox tbXOffset;
-        private System.Windows.Forms.TextBox tbYOffset;
-        private System.Windows.Forms.TextBox tbZOffset;
-        private System.Windows.Forms.TextBox tbCopies;
+        public System.Windows.Forms.TextBox tbXOffset;
+        public System.Windows.Forms.TextBox tbYOffset;
+        public System.Windows.Forms.TextBox tbZOffset;
+        public System.Windows.Forms.TextBox tbCopies;
         private System.Windows.Forms.Button btnDefault;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

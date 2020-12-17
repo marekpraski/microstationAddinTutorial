@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
+using Bentley.MicroStation.InteropServices;
+using BCOM = Bentley.Interop.MicroStationDGN;
 
 namespace csAddins
 {
@@ -17,6 +19,8 @@ namespace csAddins
         }
         protected override int Run(string[] commandLine)
         {
+            BCOM.Application app = Utilities.ComApp;
+            app.CadInputQueue.SendKeyin("csAddins DemoForm Toolbar");
             return 0;
         }
     }

@@ -126,11 +126,11 @@ namespace csAddins
 
         #endregion
 
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.RadioButton rbVertical;
-        private System.Windows.Forms.RadioButton rbHorizontal;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RadioButton rbXY;
-        private System.Windows.Forms.RadioButton rbEN;
+        public System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.RadioButton rbVertical;
+        public System.Windows.Forms.RadioButton rbHorizontal;
+        public System.Windows.Forms.GroupBox groupBox2;
+        public System.Windows.Forms.RadioButton rbXY;
+        public System.Windows.Forms.RadioButton rbEN;
     }
 }

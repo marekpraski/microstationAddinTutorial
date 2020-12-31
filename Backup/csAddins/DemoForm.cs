@@ -7,6 +7,7 @@ using Bentley.MicroStation.InteropServices;
 using Bentley.Interop.MicroStationDGN;
 using BCOM = Bentley.Interop.MicroStationDGN;
 using Bentley.MicroStation;
+using MPdll;
 
 namespace csAddins
 {

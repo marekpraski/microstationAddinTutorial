@@ -1,13 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 using Bentley.MicroStation.InteropServices;
 using Bentley.Interop.MicroStationDGN;
+using System;
+using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace csAddins
 {
     class CreateElement
     {
+        [DllImport("stdmdlbltin.dll")]
+        public static extern Element mdlLine_create
+                                (
+                                //out Element pElementOut,
+                                Element pElementIn,
+                                ref Point3d[] points
+                                );
+
+
         public static void LineAndLineString(string unparsed)
         {
             Application app = Utilities.ComApp;
@@ -24,10 +34,22 @@ namespace csAddins
             pntArray[2] = app.Point3dFromXY(3, -2);
             pntArray[3] = app.Point3dFromXY(5, 2);
             pntArray[4] = app.Point3dFromXY(6, 0);
+            //;
+            //Element line = mdlLine_create(null, ref pntArray);
             oLine = app.CreateLineElement1(null, ref pntArray);
             oLine.Color = 1; oLine.LineWeight = 2;
             app.ActiveModelReference.AddElement(oLine);
         }
+
+        [DllImport("stdmdlbltin.dll")]
+        public static extern int mdlShape_create
+                                (
+                                ref ShapeElement pElementOut,
+                                ShapeElement pElementIn,
+                                ref Point3d[] points,
+                                int nrVert,
+                                int fillMode
+                                );
         public static void ShapeAndComplexShape(string unparsed)
         {
             Application app = Utilities.ComApp;
@@ -38,6 +60,8 @@ namespace csAddins
             pntArray[3] = app.Point3dFromXY(2, -4);
             pntArray[4] = app.Point3dFromXY(4, -4);
             pntArray[5] = app.Point3dFromXY(4, -6);
+            ShapeElement sh = null;
+            mdlShape_create(ref sh, null, ref pntArray, pntArray.Length, 0);
             ShapeElement oShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
             oShape.Color = 0; oShape.LineWeight = 2;
             app.ActiveModelReference.AddElement(oShape);
@@ -52,6 +76,192 @@ namespace csAddins
             oComplexShape.Color = 1; oComplexShape.LineWeight = 2;
             app.ActiveModelReference.AddElement(oComplexShape);
         }
+
+        public static void createRegion()
+        {
+            Application app = Utilities.ComApp;
+            Point3d[] pntArray = new Point3d[4];
+            pntArray[0] = app.Point3dFromXY(20, -6);
+            pntArray[1] = app.Point3dFromXY(20, 0);
+            pntArray[2] = app.Point3dFromXY(30, 0);
+            pntArray[3] = app.Point3dFromXY(30, -6);
+
+            Point3d[] pntArray1 = new Point3d[4];
+            pntArray1[0] = app.Point3dFromXY(30, -6);
+            pntArray1[1] = app.Point3dFromXY(30, 0);
+            pntArray1[2] = app.Point3dFromXY(40, 0);
+            pntArray1[3] = app.Point3dFromXY(40, -6);
+
+            Point3d[] pntArray2 = new Point3d[4];
+            pntArray2[0] = app.Point3dFromXY(40, -6);
+            pntArray2[1] = app.Point3dFromXY(40, 0);
+            pntArray2[2] = app.Point3dFromXY(60, 0);
+            pntArray2[3] = app.Point3dFromXY(60, -6);
+
+            Point3d[] pntArray3 = new Point3d[4];
+            pntArray3[0] = app.Point3dFromXY(60, -6);
+            pntArray3[1] = app.Point3dFromXY(60, 0);
+            pntArray3[2] = app.Point3dFromXY(70, 0);
+            pntArray3[3] = app.Point3dFromXY(70, -6);
+
+
+            Point3d[] pntArray4 = new Point3d[4];
+            pntArray4[0] = app.Point3dFromXY(75, -6);
+            pntArray4[1] = app.Point3dFromXY(75, 0);
+            pntArray4[2] = app.Point3dFromXY(80, 0);
+            pntArray4[3] = app.Point3dFromXY(80, -6);
+
+            Point3d[] pntArray5 = new Point3d[4];
+            pntArray5[0] = app.Point3dFromXY(80, -6);
+            pntArray5[1] = app.Point3dFromXY(80, 0);
+            pntArray5[2] = app.Point3dFromXY(90, 0);
+            pntArray5[3] = app.Point3dFromXY(90, -6);
+
+            Element outerShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
+            Element outerShape1 = app.CreateShapeElement1(null, ref pntArray1, MsdFillMode.NotFilled);
+            Element outerShape2 = app.CreateShapeElement1(null, ref pntArray2, MsdFillMode.NotFilled);
+            Element outerShape3 = app.CreateShapeElement1(null, ref pntArray3, MsdFillMode.NotFilled);
+            Element outerShape4 = app.CreateShapeElement1(null, ref pntArray4, MsdFillMode.NotFilled);
+            Element outerShape5 = app.CreateShapeElement1(null, ref pntArray5, MsdFillMode.NotFilled);
+
+            Element[] shapes = new Element[] { outerShape, outerShape1, outerShape2 };
+            Element[] shapes1 = new Element[] { outerShape3, outerShape4, outerShape5 };
+
+            /**metoda przyjmuje dwa osobne obszary Region1 i Region2, w postaci tablicy elementów, które s¹ ³¹czone osobno
+             * ale musz¹ byæ oba, bo je¿eli jeden jest null to nie po³¹czy tego który jest przakazany; w takim przypadku zwraca enumerator zawieraj¹cy wszystkie elementy osobno;
+             * metoda ³¹czy ze sob¹ wszystkie elementy, które mo¿na ze sob¹ po³¹czyæ; docelowo, je¿eli Region1 i Region 2 da siê po³¹czyæ, to s¹ one ³¹czone i zwracany jest jeden region; 
+             * wszystkie elementy, których nie uda³o siê pod³¹czyæ do ¿adnego innego elementu, równie¿ s¹ zwracane
+             * na przyk³ad, Region1 zawiera 5 elementów a Region2 cztery; w Regionie 1 styczne ze sob¹ (a zatem daje siê je po³¹czyæ ze sob¹) s¹ elementy w dwóch grupach po 2 elementy, jeden element nie styka siê z ¿adnym
+             * w Regionie 2 s¹ to równie¿ dwie grupy; ponadto, jedna grupa w Region 1 jest styczna z jedn¹ grup¹ w Region2, tak wiêc elementy w tych grupach zostaj¹ po³¹czone ze sob¹
+             * w enumeratorze zwracane s¹ 3 grupy oraz jeden osobny element 
+              **/
+            ElementEnumerator en = app.GetRegionUnion(ref shapes1, ref shapes, null, MsdFillMode.NotFilled);
+            Element[] c = en.BuildArrayFromContents();
+
+            app.ActiveModelReference.AddElements(c);
+        }
+
+        public static ClosedElement ShapeHatched()
+        {
+            Application app = Utilities.ComApp;
+            Point3d[] pntArray = new Point3d[4];
+            pntArray[0] = app.Point3dFromXY(20, -6);
+            pntArray[1] = app.Point3dFromXY(20, 0);
+            pntArray[2] = app.Point3dFromXY(30, 0);
+            pntArray[3] = app.Point3dFromXY(30, -6);
+
+            Element outerShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
+
+            ClosedElement closedOuterShape = outerShape as ClosedElement;
+            //Pattern pattern = app.CreateHatchPattern1(1, 0.5);
+            //Matrix3d rotation = new Matrix3d();
+            //closedOuterShape.SetPattern(pattern, ref rotation);            
+
+            //app.ActiveModelReference.AddElement(outerShape as Element);
+
+            return closedOuterShape;
+        }
+
+        //public static extern int mdlPattern_hatch 
+        //                        (
+        //                        out Element hatchEdPP,
+        //                        ref Element shape,
+        //                        ref Element[] holes,
+        //                        Element templateP,
+        //                        double angle,
+        //                        double spacing,
+        //                        int view,
+        //                        bool searchForHoles,
+        //                        ref Point3d originPoint
+        //                        );
+
+//        [DllImport("stdmdlbltin.dll")]
+//        public static extern int mdlPattern_area
+//        (
+//[MarshalAs(UnmanagedType.LPStruct)]
+//                     Element patternEdPP,
+//        ref CellElement shape,
+//        ref Element[] holes,
+//        ref CellElement cell,
+//        string cellName,
+//        double scale,
+//        double angle,
+//        double rowSpacing,
+//        double columnSpacing,
+//        int view,
+//        bool searchForHoles,
+//        Point3d originPoint
+//        );
+
+        [DllImport("stdmdlbltin.dll")]
+        unsafe public static extern int mdlPattern_area
+                    (
+                    void** patternEdPP,
+                    void* shape,
+                    void* holes,
+                    void* cell,
+                    [MarshalAs(UnmanagedType.LPStr)]string cellName,
+                    double scale,
+                    double angle,
+                    double rowSpacing,
+                    double columnSpacing,
+                    int view,
+                    int searchForHoles,
+                    void* originPoint
+                    );
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int MessageBox(IntPtr hWnd, string lpText, string lpCaption, uint uType);
+
+        public static void test(string[] args)
+        {
+            // Invoke the function as a regular managed method.
+            MessageBox(IntPtr.Zero, "Command-line message box", "Attention!", 0);
+        }
+
+        unsafe public static void GroupedHoleHatched()
+        {
+            ClosedElement closedOuterShape = ShapeHatched();
+            Element outerShape = closedOuterShape as Element;
+            Point3d p = new Point3d();
+            CellElement cell = null;
+
+            Application app = Utilities.ComApp;
+
+            Point3d[] pntArray1 = new Point3d[4];
+            pntArray1[0] = app.Point3dFromXY(22, -4);
+            pntArray1[1] = app.Point3dFromXY(22, -2);
+            pntArray1[2] = app.Point3dFromXY(24, -2);
+            pntArray1[3] = app.Point3dFromXY(24, -4);
+            void* patternedElement = null;
+
+            Element innerShape = app.CreateShapeElement1(null, ref pntArray1, MsdFillMode.NotFilled);
+            Element[] innerShapes = new Element[] { innerShape };
+
+            ElementEnumerator en = closedOuterShape.GetDifferenceShapesFromRegion(ref innerShapes, null, MsdFillMode.NotFilled);
+            en.MoveNext();
+            CellElement elementToPattern = en.Current as CellElement;
+            var tmpElement = en.Current as ShapeElement;
+            var tmpPoint = elementToPattern.Origin;
+
+            int size = Marshal.SizeOf(tmpPoint);
+            IntPtr arrPtr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(tmpPoint, arrPtr, true);
+            var arr = new byte[size];
+            Marshal.Copy(arrPtr, arr, 0, size);
+
+            //void* tmpElementPtr = Pointer.Unbox(tmpElement);
+            //GCHandle handle = GCHandle.Alloc(tmpElement, GCHandleType.Pinned);
+            //IntPtr a = GCHandle.ToIntPtr(handle);
+            //mdlPattern_hatch(out hatchedElement, ref outerShape, ref innerShapes, null, 0.5, 1, -1, true, ref p);
+            mdlPattern_area((void**)&patternedElement, (void*)arrPtr, null, null, null, 1, 0.5, 1, 1, 0, 1, null);
+        }
+
+        private static double radiansFromDegrees(double v)
+        {
+            return 0.0174532925 * v;
+        }
+
         public static void TextAndTextNode(string unparsed)
         {
             Application app = Utilities.ComApp;

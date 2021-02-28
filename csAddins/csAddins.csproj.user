@@ -3,4 +3,8 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Program Files %28x86%29\Bentley\MicroStation V8i %28SELECTseries%29\MicroStation\ustation.exe</StartProgram>
+  </PropertyGroup>
 </Project>

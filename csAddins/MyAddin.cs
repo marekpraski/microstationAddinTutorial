@@ -19,8 +19,18 @@ namespace csAddins
         }
         protected override int Run(string[] commandLine)
         {
+            string unparsed = "";
             BCOM.Application app = Utilities.ComApp;
-            app.CadInputQueue.SendKeyin("csAddins DemoForm Toolbar");
+            //app.CadInputQueue.SendKeyin("DemoForm Toolbar");
+            //CreateElement.LineAndLineString(unparsed);
+            //CreateElement.ShapeAndComplexShape(unparsed);
+            CreateElement.ShapeHatched();
+            //CreateElement.GroupedHoleHatched();
+            //CreateElement.TextAndTextNode(unparsed);
+            //CreateElement.CellAndSharedCell(unparsed);
+            //CreateElement.LinearAndAngularDimension(unparsed);
+            //CreateElement.CurveAndBsplineCurve(unparsed);
+            //CreateElement.ConeAndBsplineSurface(unparsed);
             return 0;
         }
     }

@@ -26,6 +26,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,44 +37,37 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bentley.General.1.0, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4bf6c96a266e58d4, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Debug\Bentley.General.1.0.dll</HintPath>
+    <Reference Include="Bentley.General.1.0">
+      <HintPath>..\..\bentley_dlls\Bentley.General.1.0.dll</HintPath>
     </Reference>
-    <Reference Include="bentley.interop.microstationdgn, Version=8.0.0.0, Culture=neutral, PublicKeyToken=4bf6c96a266e58d4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Debug\bentley.interop.microstationdgn.dll</HintPath>
+    <Reference Include="bentley.interop.microstationdgn">
+      <HintPath>..\..\bentley_dlls\bentley.interop.microstationdgn.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="bentley.microstation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4bf6c96a266e58d4, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Debug\bentley.microstation.dll</HintPath>
+    <Reference Include="bentley.microstation">
+      <HintPath>..\..\bentley_dlls\bentley.microstation.dll</HintPath>
     </Reference>
-    <Reference Include="bentley.microstation.interfaces.1.0, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4bf6c96a266e58d4, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Debug\bentley.microstation.interfaces.1.0.dll</HintPath>
+    <Reference Include="Bentley.MicroStation.General">
+      <HintPath>..\..\bentley_dlls\Bentley.MicroStation.General.dll</HintPath>
     </Reference>
-    <Reference Include="Bentley.Windowing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=4bf6c96a266e58d4, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Debug\Bentley.Windowing.dll</HintPath>
+    <Reference Include="bentley.microstation.interfaces.1.0">
+      <HintPath>..\..\bentley_dlls\bentley.microstation.interfaces.1.0.dll</HintPath>
     </Reference>
-    <Reference Include="ClassLibrary1, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\ClassLibrary1.dll</HintPath>
+    <Reference Include="Bentley.Windowing">
+      <HintPath>..\..\bentley_dlls\Bentley.Windowing.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ustation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9bfed12b64a9b7df, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\bin\Debug\ustation.dll</HintPath>
+    <Reference Include="ustation">
+      <HintPath>..\..\bentley_dlls\ustation.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateElement.cs" />
     <Compile Include="DemoForm.cs" />
-    <Compile Include="Externals.cs" />
     <Compile Include="LevelChangedForm.cs">
       <SubType>Form</SubType>
     </Compile>

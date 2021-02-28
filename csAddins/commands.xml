@@ -8,9 +8,6 @@
 			<Keyword SubtableRef="DemoForm" CommandWord="DemoForm">
 				<Options Required="true"/>
 			</Keyword>
-			<Keyword SubtableRef="Externals" CommandWord="Externals">
-				<Options Required="true"/>
-			</Keyword>
 
   </RootKeyinTable>
 
@@ -32,9 +29,6 @@
 			<Keyword CommandWord="ToolSettings"/>
 			<Keyword CommandWord="LevelChanged"/>
 			<Keyword CommandWord="MPdll"/>	
-		</KeyinTable>
-		<KeyinTable ID="Externals">
-			<Keyword CommandWord="MPdll"/>
 		</KeyinTable>
 	</SubKeyinTables>
 
@@ -65,7 +59,5 @@
 				Function="csAddins.DemoForm.LevelChanged"/>
 		<KeyinHandler Keyin="DemoForm MPdll" 
 				Function="csAddins.DemoForm.displayMessage"/>
-		<KeyinHandler Keyin="Externals MPdll" 
-				Function="csAddins.Externals.displayMessage"/>
 	</KeyinHandlers>
 </KeyinTree>

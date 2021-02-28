@@ -1,10 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using Bentley.MicroStation.WinForms;
 using Bentley.MicroStation.InteropServices;
 
@@ -32,17 +26,17 @@ namespace csAddins
 
         private void btnModal_Click(object sender, EventArgs e)
         {
-            app.CadInputQueue.SendKeyin("csAddins DemoForm Modal");
+            app.CadInputQueue.SendKeyin(" DemoForm Modal");
         }
 
         private void btnOntop_Click(object sender, EventArgs e)
         {
-            app.CadInputQueue.SendKeyin("csAddins DemoForm TopLevel");
+            app.CadInputQueue.SendKeyin(" DemoForm TopLevel");
         }
 
         private void btnTools_Click(object sender, EventArgs e)
         {
-            app.CadInputQueue.SendKeyin("csAddins DemoForm ToolSettings");
+            app.CadInputQueue.SendKeyin(" DemoForm ToolSettings");
         }
     }
 }

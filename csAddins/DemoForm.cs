@@ -18,13 +18,15 @@ namespace csAddins
             private NoteCoordForm myForm = new NoteCoordForm();
             private Point3d[] m_atPoints = new Point3d[3];
             private int m_nPoints = 0;
+
+            #region metody spe³niaj¹ce interface IPrimitiveCommandEvents
             public void Cleanup()
             {
                 myForm.DetachFromMicroStation();
             }
             public void DataPoint(ref Point3d Point, BCOM.View View)
             {
-                if (0 == m_nPoints)
+                if (m_nPoints == 0)
                 {
                     app.CommandState.StartDynamics();
                     m_atPoints[0] = Point;
@@ -39,7 +41,7 @@ namespace csAddins
             }
             public void Dynamics(ref Point3d Point, BCOM.View View, MsdDrawingMode DrawMode)
             {
-                if (1 != m_nPoints)
+                if (m_nPoints != 1)
                     return;
                 string[] txtStr = new string[2];
                 Point3d[] txtPts = new Point3d[2];
@@ -92,16 +94,20 @@ namespace csAddins
             }
             public void Start()
             {
-                myForm.AttachToToolSettings(MyAddin.s_addin);
-                myForm.Show();
+                //myForm.AttachToToolSettings(MyAddin.s_addin);
+                //myForm.Show();
                 app.ShowCommand("Note Coordinate");
                 app.ShowPrompt("Please identify a point");
                 app.CommandState.EnableAccuSnap();
             }
+            #endregion
+
         }
+
 
         class MultiScaleCopyClass : ILocateCommandEvents
         {
+            #region metody implementuj¹ce interface ILocateCommandEvents
             private BCOM.Application app = Utilities.ComApp;
             private MultiScaleCopyForm myForm = new MultiScaleCopyForm();
             public void Accept(Element Elem, ref Point3d Point, BCOM.View View)
@@ -149,6 +155,8 @@ namespace csAddins
                 app.ShowPrompt("Please identify an element");
                 app.CommandState.EnableAccuSnap();
             }
+
+            #endregion
         }
 
         public static void displayMessage(string unparsed)

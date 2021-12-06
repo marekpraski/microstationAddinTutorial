@@ -20,10 +20,14 @@ namespace csAddins
             private int m_nPoints = 0;
 
             #region metody spe³niaj¹ce interface IPrimitiveCommandEvents
+            /// actions after selecting another tool in Microstation
             public void Cleanup()
             {
                 myForm.DetachFromMicroStation();
             }
+            ///  User-supplied datapoint.
+            /// point: Where the user clicked.
+            /// view: User clicked in this view.
             public void DataPoint(ref Point3d Point, BCOM.View View)
             {
                 if (m_nPoints == 0)
@@ -39,6 +43,10 @@ namespace csAddins
                     Reset();
                 }
             }
+            /// Called by the state machine for each mouse move event.
+            /// point: Current cursor location.
+            /// view: Cursor is in this view.
+            /// drawMode: Draw mode supplied by the drawing engine.
             public void Dynamics(ref Point3d Point, BCOM.View View, MsdDrawingMode DrawMode)
             {
                 if (m_nPoints != 1)
@@ -84,14 +92,17 @@ namespace csAddins
                 if (MsdDrawingMode.Normal == DrawMode)
                     app.ActiveModelReference.AddElement(elemCell);
             }
+            /// Keyin: User-supplied key-in while command is active.
             public void Keyin(string Keyin)
             {
             }
+            /// Restart this tool.
             public void Reset()
             {
                 m_nPoints = 0;
                 app.CommandState.StartPrimitive(this, false);
             }
+            /// Start this command.
             public void Start()
             {
                 //myForm.AttachToToolSettings(MyAddin.s_addin);

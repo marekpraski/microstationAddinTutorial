@@ -9,44 +9,47 @@ namespace csAddins
 {
     class CreateElement
     {
-        [DllImport("stdmdlbltin.dll")]
-        public static extern Element mdlLine_create
+
+            [DllImport("stdmdlbltin.dll")]
+        public static extern int mdlLine_create
                                 (
-                                //out Element pElementOut,
+                                Element pElementOut,
                                 Element pElementIn,
-                                ref Point3d[] points
+                                Point3d[] points
                                 );
 
 
         public static void LineAndLineString(string unparsed)
         {
             Application app = Utilities.ComApp;
-            Point3d startPnt = app.Point3dZero();
-            Point3d endPnt = startPnt;
-            startPnt.X = 10;
-            LineElement oLine = app.CreateLineElement2(null, ref startPnt, ref endPnt);
-            oLine.Color = 0; oLine.LineWeight = 2;
-            app.ActiveModelReference.AddElement(oLine);
+            //int elDescr = 0;
+            //app.MdlCreateElementFromElementDescrP(elDescr);
+            //Point3d startPnt = app.Point3dZero(); 
+            // Point3d endPnt = startPnt;
+            //startPnt.X = 10;
+            //LineElement oLine = app.CreateLineElement2(null, ref startPnt, ref endPnt);
+            //oLine.Color = 0; oLine.LineWeight = 2;
+            //app.ActiveModelReference.AddElement(oLine);
 
-            Point3d[] pntArray = new Point3d[5];
+            Point3d[] pntArray = new Point3d[2];
             pntArray[0] = app.Point3dZero();
             pntArray[1] = app.Point3dFromXY(1, 2);
-            pntArray[2] = app.Point3dFromXY(3, -2);
-            pntArray[3] = app.Point3dFromXY(5, 2);
-            pntArray[4] = app.Point3dFromXY(6, 0);
+            
             //;
-            //Element line = mdlLine_create(null, ref pntArray);
-            oLine = app.CreateLineElement1(null, ref pntArray);
-            oLine.Color = 1; oLine.LineWeight = 2;
-            app.ActiveModelReference.AddElement(oLine);
+
+            Element line = null;
+            mdlLine_create(line, null, pntArray);
+            //oLine = app.CreateLineElement1(null, ref pntArray);
+            //oLine.Color = 1; oLine.LineWeight = 2;
+            //app.ActiveModelReference.AddElement(oLine);
         }
 
         [DllImport("stdmdlbltin.dll")]
         public static extern int mdlShape_create
                                 (
-                                ref ShapeElement pElementOut,
-                                ShapeElement pElementIn,
-                                ref Point3d[] points,
+                                 ref int pElementOut,
+                                 ShapeElement pElementIn,
+                                 Point3d[] points,
                                 int nrVert,
                                 int fillMode
                                 );
@@ -60,21 +63,23 @@ namespace csAddins
             pntArray[3] = app.Point3dFromXY(2, -4);
             pntArray[4] = app.Point3dFromXY(4, -4);
             pntArray[5] = app.Point3dFromXY(4, -6);
+            int modRefP = app.ActiveModelReference.MdlModelRefP();
             ShapeElement sh = null;
-            mdlShape_create(ref sh, null, ref pntArray, pntArray.Length, 0);
-            ShapeElement oShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
-            oShape.Color = 0; oShape.LineWeight = 2;
-            app.ActiveModelReference.AddElement(oShape);
+            ShapeElement sha = null;
+            mdlShape_create(ref modRefP,  sha,  pntArray, pntArray.Length, 0);
+            //ShapeElement oShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
+            //oShape.Color = 0; oShape.LineWeight = 2;
+            //app.ActiveModelReference.AddElement(oShape);
 
-            ChainableElement[] elmArray = new ChainableElement[2];
-            for (int i = 0; i < 6; i++)
-                pntArray[i].X += 5;
-            elmArray[0] = app.CreateLineElement1(null, ref pntArray);
-            pntArray[2].Y = -8;
-            elmArray[1] = app.CreateArcElement3(null, ref pntArray[5], ref pntArray[2], ref pntArray[0]);
-            ComplexShapeElement oComplexShape = app.CreateComplexShapeElement1(ref elmArray, MsdFillMode.NotFilled);
-            oComplexShape.Color = 1; oComplexShape.LineWeight = 2;
-            app.ActiveModelReference.AddElement(oComplexShape);
+        //    ChainableElement[] elmArray = new ChainableElement[2];
+        //    for (int i = 0; i < 6; i++)
+        //        pntArray[i].X += 5;
+        //    elmArray[0] = app.CreateLineElement1(null, ref pntArray);
+        //    pntArray[2].Y = -8;
+        //    elmArray[1] = app.CreateArcElement3(null, ref pntArray[5], ref pntArray[2], ref pntArray[0]);
+        //    ComplexShapeElement oComplexShape = app.CreateComplexShapeElement1(ref elmArray, MsdFillMode.NotFilled);
+        //    oComplexShape.Color = 1; oComplexShape.LineWeight = 2;
+        //    app.ActiveModelReference.AddElement(oComplexShape);
         }
 
         public static void createRegion()
@@ -194,20 +199,20 @@ namespace csAddins
 //        );
 
         [DllImport("stdmdlbltin.dll")]
-        unsafe public static extern int mdlPattern_area
+        public static extern int mdlPattern_area
                     (
-                    void** patternEdPP,
-                    void* shape,
-                    void* holes,
-                    void* cell,
-                    [MarshalAs(UnmanagedType.LPStr)]string cellName,
+                    ref int patternEdPP,
+                    Element shape,
+                    Element[] holes,
+                    CellElement cell,
+                    string cellName,
                     double scale,
                     double angle,
                     double rowSpacing,
                     double columnSpacing,
                     int view,
-                    int searchForHoles,
-                    void* originPoint
+                    bool searchForHoles,
+                    Point3d originPoint
                     );
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -221,40 +226,39 @@ namespace csAddins
 
         unsafe public static void GroupedHoleHatched()
         {
+            Application app = Utilities.ComApp;
+
             ClosedElement closedOuterShape = ShapeHatched();
             Element outerShape = closedOuterShape as Element;
-            Point3d p = new Point3d();
+            Point3d p = app.Point3dFromXY(0, 0);
             CellElement cell = null;
-
-            Application app = Utilities.ComApp;
+           // IntPtr pt = (IntPtr)(&closedOuterShape);
 
             Point3d[] pntArray1 = new Point3d[4];
             pntArray1[0] = app.Point3dFromXY(22, -4);
             pntArray1[1] = app.Point3dFromXY(22, -2);
             pntArray1[2] = app.Point3dFromXY(24, -2);
             pntArray1[3] = app.Point3dFromXY(24, -4);
-            void* patternedElement = null;
 
             Element innerShape = app.CreateShapeElement1(null, ref pntArray1, MsdFillMode.NotFilled);
             Element[] innerShapes = new Element[] { innerShape };
 
-            ElementEnumerator en = closedOuterShape.GetDifferenceShapesFromRegion(ref innerShapes, null, MsdFillMode.NotFilled);
-            en.MoveNext();
-            CellElement elementToPattern = en.Current as CellElement;
-            var tmpElement = en.Current as ShapeElement;
-            var tmpPoint = elementToPattern.Origin;
+            //ElementEnumerator en = closedOuterShape.GetDifferenceShapesFromRegion(ref innerShapes, null, MsdFillMode.NotFilled);
+            //en.MoveNext();
+            //CellElement elementToPattern = en.Current as CellElement;
+            //var tmpElement = en.Current as ShapeElement;
+            //var tmpPoint = elementToPattern.Origin;
 
-            int size = Marshal.SizeOf(tmpPoint);
-            IntPtr arrPtr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(tmpPoint, arrPtr, true);
-            var arr = new byte[size];
-            Marshal.Copy(arrPtr, arr, 0, size);
 
             //void* tmpElementPtr = Pointer.Unbox(tmpElement);
             //GCHandle handle = GCHandle.Alloc(tmpElement, GCHandleType.Pinned);
             //IntPtr a = GCHandle.ToIntPtr(handle);
             //mdlPattern_hatch(out hatchedElement, ref outerShape, ref innerShapes, null, 0.5, 1, -1, true, ref p);
-            mdlPattern_area((void**)&patternedElement, (void*)arrPtr, null, null, null, 1, 0.5, 1, 1, 0, 1, null);
+            //mdlPattern_area((void**)&patternedElement, (void*)arrPtr, null, null, null, 1, 0.5, 1, 1, 0, 1, null);
+
+            int elDesc = 0;
+            mdlPattern_area(ref elDesc, outerShape, innerShapes, cell,"gh",1, 0.5, 1,1, 1, true, p);
+            Element e = app.MdlCreateElementFromElementDescrP(elDesc);
         }
 
         private static double radiansFromDegrees(double v)

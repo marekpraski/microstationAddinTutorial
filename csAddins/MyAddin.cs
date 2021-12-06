@@ -12,6 +12,7 @@ namespace csAddins
     internal sealed class MyAddin : Bentley.MicroStation.AddIn
     {
         internal static MyAddin s_addin;
+        public static BCOM.Application app;
         private MyAddin(System.IntPtr mdlDesc)
             : base(mdlDesc)
         {
@@ -20,11 +21,17 @@ namespace csAddins
         protected override int Run(string[] commandLine)
         {
             string unparsed = "";
-            BCOM.Application app = Utilities.ComApp;
+            app = Utilities.ComApp;
+
+            //TestMdlMethods.getTypeElement();
+            //TestMdlMethods.getElementSize();
+            //TestMdlMethods.getElementRange();
+            //TestMdlMethods.mdlLine();
+
             //app.CadInputQueue.SendKeyin("DemoForm Toolbar");
             //CreateElement.LineAndLineString(unparsed);
             //CreateElement.ShapeAndComplexShape(unparsed);
-            CreateElement.ShapeHatched();
+            //CreateElement.ShapeHatched();
             //CreateElement.GroupedHoleHatched();
             //CreateElement.TextAndTextNode(unparsed);
             //CreateElement.CellAndSharedCell(unparsed);

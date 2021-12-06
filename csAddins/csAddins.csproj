@@ -66,8 +66,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandsHandler.cs" />
     <Compile Include="CreateElement.cs" />
     <Compile Include="DemoForm.cs" />
+    <Compile Include="DynamicLineDraw.cs" />
     <Compile Include="LevelChangedForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -99,6 +101,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestMdlMethods.cs" />
     <Compile Include="ToolbarForm.cs">
       <SubType>Form</SubType>
     </Compile>

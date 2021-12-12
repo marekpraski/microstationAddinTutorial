@@ -10,5 +10,10 @@ namespace csAddins
         {
             InitializeComponent();
         }
+
+        private void tbStart_TextChanged(object sender, System.EventArgs e)
+        {
+            tbKoniec.Text = tbStart.Text;
+        }
     }
 }

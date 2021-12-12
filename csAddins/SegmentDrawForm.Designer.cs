@@ -38,7 +38,7 @@ namespace csAddins
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 17);
+            this.label1.Location = new System.Drawing.Point(6, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 0;
@@ -46,15 +46,16 @@ namespace csAddins
             // 
             // tbStart
             // 
-            this.tbStart.Location = new System.Drawing.Point(128, 14);
+            this.tbStart.Location = new System.Drawing.Point(122, 6);
             this.tbStart.Name = "tbStart";
             this.tbStart.Size = new System.Drawing.Size(100, 20);
             this.tbStart.TabIndex = 1;
+            this.tbStart.TextChanged += new System.EventHandler(this.tbStart_TextChanged);
             // 
             // labelKoniec
             // 
             this.labelKoniec.AutoSize = true;
-            this.labelKoniec.Location = new System.Drawing.Point(12, 44);
+            this.labelKoniec.Location = new System.Drawing.Point(6, 36);
             this.labelKoniec.Name = "labelKoniec";
             this.labelKoniec.Size = new System.Drawing.Size(106, 13);
             this.labelKoniec.TabIndex = 2;
@@ -62,7 +63,7 @@ namespace csAddins
             // 
             // tbKoniec
             // 
-            this.tbKoniec.Location = new System.Drawing.Point(128, 41);
+            this.tbKoniec.Location = new System.Drawing.Point(122, 33);
             this.tbKoniec.Name = "tbKoniec";
             this.tbKoniec.Size = new System.Drawing.Size(100, 20);
             this.tbKoniec.TabIndex = 3;
@@ -71,14 +72,16 @@ namespace csAddins
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(242, 69);
+            this.ClientSize = new System.Drawing.Size(228, 58);
             this.Controls.Add(this.tbKoniec);
             this.Controls.Add(this.labelKoniec);
             this.Controls.Add(this.tbStart);
             this.Controls.Add(this.label1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "SegmentDrawForm";
-            this.Text = "SegmentDrawForm";
+            this.Text = "Metry";
             this.ResumeLayout(false);
             this.PerformLayout();
 

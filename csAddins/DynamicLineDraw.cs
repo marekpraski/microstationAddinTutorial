@@ -21,6 +21,9 @@ namespace csAddins
         {
             if (userClicked == 0)
             {
+                //zaczynając rysować, jeżeli zasnapuję się do elementu, mogę odczytać link
+                Element el = MyAddin.app.CommandState.LocateElement(Point, View, true);
+                bool hasLinks = checkLinksExist(el); 
                 app.CommandState.StartDynamics();
                 linestringPoints[0] = Point;
             }
@@ -37,8 +40,10 @@ namespace csAddins
         {
             removeLastPoint();
             Element elem = app.CreateLineElement1(null, ref linestringPoints);
-
             app.ActiveModelReference.AddElement(elem);
+
+            userClicked = 0;
+            this.linestringPoints = new Point3d[2];
             app.CommandState.StartPrimitive(this, false);
         }
 
@@ -63,6 +68,14 @@ namespace csAddins
         }
 
         #endregion
+
+        private bool checkLinksExist(Element el)
+        {
+            if (el == null)
+                return false;
+            DatabaseLink[] links = el.GetDatabaseLinks(MsdDatabaseLinkage.Odbc);
+            return links.Length > 0;
+        }
 
         private void expandPointsArray()
         {

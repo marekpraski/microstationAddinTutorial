@@ -53,7 +53,8 @@ namespace csAddins
                     return;
                 string[] txtStr = new string[2];
                 Point3d[] txtPts = new Point3d[2];
-                Element[] elems = new Element[3]; m_atPoints[1] = Point;
+                Element[] elems = new Element[3]; 
+                m_atPoints[1] = Point;
                 txtStr[0] = (myForm.rbEN.Checked ? "E=" : "X=") + m_atPoints[0].X.ToString("F2");
                 txtStr[1] = (myForm.rbEN.Checked ? "N=" : "Y=") + m_atPoints[0].Y.ToString("F2");
                 double txtLen = app.ActiveSettings.TextStyle.Width * Math.Max(txtStr[0].Length, txtStr[1].Length);

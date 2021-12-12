@@ -29,6 +29,7 @@
 			<Keyword CommandWord="ToolSettings"/>
 			<Keyword CommandWord="LevelChanged"/>
 			<Keyword CommandWord="DrawLine"/>
+			<Keyword CommandWord="SegmentDraw"/>
 			<Keyword CommandWord="MPdll"/>	
 		</KeyinTable>
 	</SubKeyinTables>
@@ -60,6 +61,8 @@
 				Function="csAddins.DemoForm.LevelChanged"/>
 		<KeyinHandler Keyin="DemoForm DrawLine"
 				Function="csAddins.CommandsHandler.DrawLineTest"/>
+		<KeyinHandler Keyin="DemoForm SegmentDraw"
+				Function="csAddins.CommandsHandler.DrawLineSegmentTest"/>
 		<KeyinHandler Keyin="DemoForm MPdll" 
 				Function="csAddins.DemoForm.displayMessage"/>
 	</KeyinHandlers>

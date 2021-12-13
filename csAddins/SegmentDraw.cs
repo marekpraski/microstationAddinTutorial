@@ -67,16 +67,16 @@ namespace csAddins
 
         #endregion
 
-        private void drawCell(ref Point3d point, View view, MsdDrawingMode drawMode, string cellText)
+        private void drawCell(ref Point3d point, View view, MsdDrawingMode drawMode, string text)
         {
-            CellElement cell = makeCell(ref point, view, cellText);
-            cell.Redraw(drawMode);
+            TextElement textElem = makeTextElement(ref point, view, text);
+            textElem.Redraw(drawMode);
         }
 
-        private void placeCell(Point3d point, View view, string cellText)
+        private void placeCell(Point3d point, View view, string text)
         {
-            CellElement cell = makeCell(ref point, view, cellText);
-            this.app.ActiveModelReference.AddElement(cell);
+            TextElement textElem = makeTextElement(ref point, view, text);
+            this.app.ActiveModelReference.AddElement(textElem);
         }
 
         private void drawLine(ref Point3d point, View view, MsdDrawingMode drawMode)
@@ -90,28 +90,21 @@ namespace csAddins
         {
             Element[] elems = new Element[2];
             elems[0] = app.CreateLineElement1(null, ref this.segmentPoints);
-            elems[1] = makeCell(ref point, view, inputForm.tbKoniec.Text);
+            elems[1] = makeTextElement(ref point, view, inputForm.tbKoniec.Text);
             app.ActiveModelReference.AddElements(ref elems);
         }
 
         #region tworzenie celki
-        private CellElement makeCell(ref Point3d point, View view, string cellText)
-        {
-            string cellName = "metry";
-            Element[] cellElems = getCellSegments(point, cellText);
-            return app.CreateCellElement1(cellName, ref cellElems, point, false);
-        }
-
-        private Element[] getCellSegments(Point3d point, string cellText)
+        private TextElement makeTextElement(ref Point3d point, View view, string text)
         {
             Matrix3d rMatrix = app.Matrix3dIdentity();
-            TextElement te = app.CreateTextElement1(null, cellText, ref point, ref rMatrix);
+            TextElement te = app.CreateTextElement1(null, text, ref point, ref rMatrix);
             te.TextStyle.Font = app.ActiveDesignFile.Fonts.Find(MsdFontType.MicroStation, "ENGINEERING", null);
             te.TextStyle.Justification = MsdTextJustification.RightBottom;
             te.TextStyle.Height = 4;
             te.TextStyle.Width = 3;
 
-            return new Element[] { te };
+            return te;
         }
 
         #endregion

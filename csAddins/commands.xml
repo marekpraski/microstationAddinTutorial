@@ -21,6 +21,7 @@
 			<Keyword CommandWord="LinearAndAngularDimension"> </Keyword>
 			<Keyword CommandWord="CurveAndBsplineCurve"> </Keyword>
 			<Keyword CommandWord="ConeAndBsplineSurface"> </Keyword>
+			<Keyword CommandWord="PatternedShape"> </Keyword>
 		</KeyinTable>
 		<KeyinTable ID="DemoForm">
 			<Keyword CommandWord="Toolbar"/>
@@ -49,6 +50,8 @@
 			Function="csAddins.CreateElement.CurveAndBsplineCurve"/>
 		<KeyinHandler Keyin="CreateElement ConeAndBsplineSurface"
 			Function="csAddins.CreateElement.ConeAndBsplineSurface"/>
+		<KeyinHandler Keyin="CreateElement PatternedShape"
+			Function="csAddins.CreateElement.createPatternedArea"/>
 		<KeyinHandler Keyin="DemoForm Toolbar" 
 				Function="csAddins.DemoForm.Toolbar"/>
 		<KeyinHandler Keyin="DemoForm Modal" 

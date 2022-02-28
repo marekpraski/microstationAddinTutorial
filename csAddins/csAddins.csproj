@@ -108,6 +108,7 @@
     <Compile Include="SegmentDrawForm.Designer.cs">
       <DependentUpon>SegmentDrawForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShapePatterner.cs" />
     <Compile Include="TestMdlMethods.cs" />
     <Compile Include="ToolbarForm.cs">
       <SubType>Form</SubType>

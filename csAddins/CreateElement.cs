@@ -67,19 +67,7 @@ namespace csAddins
             ShapeElement sh = null;
             ShapeElement sha = null;
             mdlShape_create(ref modRefP,  sha,  pntArray, pntArray.Length, 0);
-            //ShapeElement oShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
-            //oShape.Color = 0; oShape.LineWeight = 2;
-            //app.ActiveModelReference.AddElement(oShape);
 
-        //    ChainableElement[] elmArray = new ChainableElement[2];
-        //    for (int i = 0; i < 6; i++)
-        //        pntArray[i].X += 5;
-        //    elmArray[0] = app.CreateLineElement1(null, ref pntArray);
-        //    pntArray[2].Y = -8;
-        //    elmArray[1] = app.CreateArcElement3(null, ref pntArray[5], ref pntArray[2], ref pntArray[0]);
-        //    ComplexShapeElement oComplexShape = app.CreateComplexShapeElement1(ref elmArray, MsdFillMode.NotFilled);
-        //    oComplexShape.Color = 1; oComplexShape.LineWeight = 2;
-        //    app.ActiveModelReference.AddElement(oComplexShape);
         }
 
         public static void createRegion()
@@ -146,93 +134,15 @@ namespace csAddins
             app.ActiveModelReference.AddElements(c);
         }
 
-        public static ClosedElement ShapeHatched()
+        public static void GroupedHoleHatched()
         {
-            Application app = Utilities.ComApp;
-            Point3d[] pntArray = new Point3d[4];
-            pntArray[0] = app.Point3dFromXY(20, -6);
-            pntArray[1] = app.Point3dFromXY(20, 0);
-            pntArray[2] = app.Point3dFromXY(30, 0);
-            pntArray[3] = app.Point3dFromXY(30, -6);
+            Application app = Bentley.MicroStation.InteropServices.Utilities.ComApp;
 
-            Element outerShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
-
-            ClosedElement closedOuterShape = outerShape as ClosedElement;
-            //Pattern pattern = app.CreateHatchPattern1(1, 0.5);
-            //Matrix3d rotation = new Matrix3d();
-            //closedOuterShape.SetPattern(pattern, ref rotation);            
-
-            //app.ActiveModelReference.AddElement(outerShape as Element);
-
-            return closedOuterShape;
-        }
-
-        //public static extern int mdlPattern_hatch 
-        //                        (
-        //                        out Element hatchEdPP,
-        //                        ref Element shape,
-        //                        ref Element[] holes,
-        //                        Element templateP,
-        //                        double angle,
-        //                        double spacing,
-        //                        int view,
-        //                        bool searchForHoles,
-        //                        ref Point3d originPoint
-        //                        );
-
-//        [DllImport("stdmdlbltin.dll")]
-//        public static extern int mdlPattern_area
-//        (
-//[MarshalAs(UnmanagedType.LPStruct)]
-//                     Element patternEdPP,
-//        ref CellElement shape,
-//        ref Element[] holes,
-//        ref CellElement cell,
-//        string cellName,
-//        double scale,
-//        double angle,
-//        double rowSpacing,
-//        double columnSpacing,
-//        int view,
-//        bool searchForHoles,
-//        Point3d originPoint
-//        );
-
-        [DllImport("stdmdlbltin.dll")]
-        public static extern int mdlPattern_area
-                    (
-                    ref int patternEdPP,
-                    Element shape,
-                    Element[] holes,
-                    CellElement cell,
-                    string cellName,
-                    double scale,
-                    double angle,
-                    double rowSpacing,
-                    double columnSpacing,
-                    int view,
-                    bool searchForHoles,
-                    Point3d originPoint
-                    );
-
-        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        private static extern int MessageBox(IntPtr hWnd, string lpText, string lpCaption, uint uType);
-
-        public static void test(string[] args)
-        {
-            // Invoke the function as a regular managed method.
-            MessageBox(IntPtr.Zero, "Command-line message box", "Attention!", 0);
-        }
-
-        unsafe public static void GroupedHoleHatched()
-        {
-            Application app = Utilities.ComApp;
-
-            ClosedElement closedOuterShape = ShapeHatched();
+            ClosedElement closedOuterShape = createClosedElement();
             Element outerShape = closedOuterShape as Element;
             Point3d p = app.Point3dFromXY(0, 0);
             CellElement cell = null;
-           // IntPtr pt = (IntPtr)(&closedOuterShape);
+
 
             Point3d[] pntArray1 = new Point3d[4];
             pntArray1[0] = app.Point3dFromXY(22, -4);
@@ -242,23 +152,6 @@ namespace csAddins
 
             Element innerShape = app.CreateShapeElement1(null, ref pntArray1, MsdFillMode.NotFilled);
             Element[] innerShapes = new Element[] { innerShape };
-
-            //ElementEnumerator en = closedOuterShape.GetDifferenceShapesFromRegion(ref innerShapes, null, MsdFillMode.NotFilled);
-            //en.MoveNext();
-            //CellElement elementToPattern = en.Current as CellElement;
-            //var tmpElement = en.Current as ShapeElement;
-            //var tmpPoint = elementToPattern.Origin;
-
-
-            //void* tmpElementPtr = Pointer.Unbox(tmpElement);
-            //GCHandle handle = GCHandle.Alloc(tmpElement, GCHandleType.Pinned);
-            //IntPtr a = GCHandle.ToIntPtr(handle);
-            //mdlPattern_hatch(out hatchedElement, ref outerShape, ref innerShapes, null, 0.5, 1, -1, true, ref p);
-            //mdlPattern_area((void**)&patternedElement, (void*)arrPtr, null, null, null, 1, 0.5, 1, 1, 0, 1, null);
-
-            int elDesc = 0;
-            mdlPattern_area(ref elDesc, outerShape, innerShapes, cell,"gh",1, 0.5, 1,1, 1, true, p);
-            Element e = app.MdlCreateElementFromElementDescrP(elDesc);
         }
 
         private static double radiansFromDegrees(double v)
@@ -416,6 +309,69 @@ namespace csAddins
             BsplineSurfaceElement oSurfaceElm = app.CreateBsplineSurfaceElement1(null, oBsplineSurface);
             oSurfaceElm.Color = 1;
             app.ActiveModelReference.AddElement(oSurfaceElm);
+        }
+
+        public static ClosedElement createClosedElement()
+        {
+            Application app = Utilities.ComApp;
+            Point3d[] pntArray = new Point3d[4];
+            pntArray[0] = app.Point3dFromXY(20, -6);
+            pntArray[1] = app.Point3dFromXY(20, 0);
+            pntArray[2] = app.Point3dFromXY(30, 0);
+            pntArray[3] = app.Point3dFromXY(30, -6);
+
+            Element outerShape = app.CreateShapeElement1(null, ref pntArray, MsdFillMode.NotFilled);
+
+            ClosedElement closedOuterShape = outerShape as ClosedElement;
+
+            return closedOuterShape;
+        }
+
+        public static ShapeElement createShapeElement()
+        {
+            Application app = Bentley.MicroStation.InteropServices.Utilities.ComApp;
+            Point3d[] pntArray = new Point3d[4];
+
+            //flat shape
+            //pntArray[0] = app.Point3dFromXYZ(20, -6, 0);
+            //pntArray[1] = app.Point3dFromXYZ(20, 0, 0);
+            //pntArray[2] = app.Point3dFromXYZ(30, 0, 0);
+            //pntArray[3] = app.Point3dFromXYZ(30, -6, 0);
+
+            //vertical shape
+            pntArray[0] = app.Point3dFromXYZ(20, 0, -6);
+            pntArray[3] = app.Point3dFromXYZ(20, 0, 0);
+            pntArray[2] = app.Point3dFromXYZ(30, 0, 0);
+            pntArray[1] = app.Point3dFromXYZ(30, 0, -6);
+            return app.CreateShapeElement1(null, ref pntArray, MsdFillMode.Outlined);
+        }
+
+        public static void createPatternedArea(string unparsed)
+        {
+            Application app = Bentley.MicroStation.InteropServices.Utilities.ComApp;
+            ShapeElement shapeElement = createShapeElement();
+
+            app.ActiveModelReference.AddElement(shapeElement);
+            int pos = shapeElement.FilePosition;
+            string quote = "\"";
+
+            string keyin = "mdl load mp " + quote + pos + " 1 0 0 14" + quote;
+            app.CadInputQueue.SendCommand(keyin, true);
+        }
+
+        public static void createPatternedArea1(string unparsed)
+        {
+            ShapeElement shapeElement = createShapeElement();
+            Application app = Utilities.ComApp;
+
+            //SmartSolid sme = app.SmartSolid;
+            //SmartSolidElement smelem = sme.CreateCylinder(null, 1, 10);
+
+            Matrix3d m3d = app.Matrix3dFromAxisAndRotationAngle(0, 1);
+            Transform3d tr = app.Transform3dFromMatrix3d(ref m3d);
+            //smelem.Transform(ref tr);
+            //shapeElement.Transform(ref tr);
+            app.ActiveModelReference.AddElement(shapeElement);
         }
     }
 }

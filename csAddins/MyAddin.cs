@@ -20,24 +20,7 @@ namespace csAddins
         }
         protected override int Run(string[] commandLine)
         {
-            string unparsed = "";
             app = Utilities.ComApp;
-
-            //TestMdlMethods.getTypeElement();
-            //TestMdlMethods.getElementSize();
-            //TestMdlMethods.getElementRange();
-            //TestMdlMethods.mdlLine();
-
-            //app.CadInputQueue.SendKeyin("DemoForm Toolbar");
-            //CreateElement.LineAndLineString(unparsed);
-            //CreateElement.ShapeAndComplexShape(unparsed);
-            //CreateElement.ShapeHatched();
-            //CreateElement.GroupedHoleHatched();
-            //CreateElement.TextAndTextNode(unparsed);
-            //CreateElement.CellAndSharedCell(unparsed);
-            //CreateElement.LinearAndAngularDimension(unparsed);
-            //CreateElement.CurveAndBsplineCurve(unparsed);
-            //CreateElement.ConeAndBsplineSurface(unparsed);
             return 0;
         }
     }

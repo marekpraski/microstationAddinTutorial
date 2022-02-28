@@ -14,59 +14,17 @@
   <SubKeyinTables>
     
 		<KeyinTable ID="Commands">
-			<Keyword CommandWord="LineAndLineString"> </Keyword>
-			<Keyword CommandWord="ShapeAndComplexShape"> </Keyword>
-			<Keyword CommandWord="TextAndTextNode"> </Keyword>
-			<Keyword CommandWord="CellAndSharedCell"> </Keyword>
-			<Keyword CommandWord="LinearAndAngularDimension"> </Keyword>
-			<Keyword CommandWord="CurveAndBsplineCurve"> </Keyword>
-			<Keyword CommandWord="ConeAndBsplineSurface"> </Keyword>
 			<Keyword CommandWord="PatternedShape"> </Keyword>
 		</KeyinTable>
 		<KeyinTable ID="DemoForm">
-			<Keyword CommandWord="Toolbar"/>
-			<Keyword CommandWord="Modal"/>
-			<Keyword CommandWord="TopLevel"/>
-			<Keyword CommandWord="ToolSettings"/>
-			<Keyword CommandWord="LevelChanged"/>
 			<Keyword CommandWord="DrawLine"/>
-			<Keyword CommandWord="SegmentDraw"/>
-			<Keyword CommandWord="MPdll"/>	
 		</KeyinTable>
 	</SubKeyinTables>
 
 	<KeyinHandlers>
-		<KeyinHandler Keyin="CreateElement LineAndLineString"
-			Function="csAddins.CreateElement.LineAndLineString"/>
-		<KeyinHandler Keyin="CreateElement ShapeAndComplexShape"
-			Function="csAddins.CreateElement.ShapeAndComplexShape"/>
-		<KeyinHandler Keyin="CreateElement TextAndTextNode"
-			Function="csAddins.CreateElement.TextAndTextNode"/>
-		<KeyinHandler Keyin="CreateElement CellAndSharedCell"
-			Function="csAddins.CreateElement.CellAndSharedCell"/>
-		<KeyinHandler Keyin="CreateElement LinearAndAngularDimension"
-			Function="csAddins.CreateElement.LinearAndAngularDimension"/>
-		<KeyinHandler Keyin="CreateElement CurveAndBsplineCurve"
-			Function="csAddins.CreateElement.CurveAndBsplineCurve"/>
-		<KeyinHandler Keyin="CreateElement ConeAndBsplineSurface"
-			Function="csAddins.CreateElement.ConeAndBsplineSurface"/>
 		<KeyinHandler Keyin="CreateElement PatternedShape"
 			Function="csAddins.CreateElement.createPatternedArea"/>
-		<KeyinHandler Keyin="DemoForm Toolbar" 
-				Function="csAddins.DemoForm.Toolbar"/>
-		<KeyinHandler Keyin="DemoForm Modal" 
-				Function="csAddins.DemoForm.Modal"/>
-		<KeyinHandler Keyin="DemoForm TopLevel" 
-				Function="csAddins.DemoForm.TopLevel"/>
-		<KeyinHandler Keyin="DemoForm ToolSettings" 
-				Function="csAddins.DemoForm.ToolSettings"/>
-		<KeyinHandler Keyin="DemoForm LevelChanged" 
-				Function="csAddins.DemoForm.LevelChanged"/>
 		<KeyinHandler Keyin="DemoForm DrawLine"
 				Function="csAddins.CommandsHandler.DrawLineTest"/>
-		<KeyinHandler Keyin="DemoForm SegmentDraw"
-				Function="csAddins.CommandsHandler.DrawLineSegmentTest"/>
-		<KeyinHandler Keyin="DemoForm MPdll" 
-				Function="csAddins.DemoForm.displayMessage"/>
 	</KeyinHandlers>
 </KeyinTree>

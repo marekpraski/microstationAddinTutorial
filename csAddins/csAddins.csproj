@@ -68,84 +68,21 @@
   <ItemGroup>
     <Compile Include="CommandsHandler.cs" />
     <Compile Include="CreateElement.cs" />
-    <Compile Include="DemoForm.cs" />
     <Compile Include="DynamicLineDraw.cs" />
-    <Compile Include="SegmentDraw.cs" />
-    <Compile Include="LevelChangedForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="LevelChangedForm.Designer.cs">
-      <DependentUpon>LevelChangedForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ModalForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ModalForm.Designer.cs">
-      <DependentUpon>ModalForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MultiScaleCopyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MultiScaleCopyForm.Designer.cs">
-      <DependentUpon>MultiScaleCopyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="MyAddin.cs" />
-    <Compile Include="NoteCoordForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="NoteCoordForm.Designer.cs">
-      <DependentUpon>NoteCoordForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SegmentDrawForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SegmentDrawForm.Designer.cs">
-      <DependentUpon>SegmentDrawForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ShapePatterner.cs" />
-    <Compile Include="TestMdlMethods.cs" />
-    <Compile Include="ToolbarForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ToolbarForm.Designer.cs">
-      <DependentUpon>ToolbarForm.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="commands.xml" />
-    <EmbeddedResource Include="LevelChangedForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>LevelChangedForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ModalForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ModalForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MultiScaleCopyForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MultiScaleCopyForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NoteCoordForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>NoteCoordForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SegmentDrawForm.resx">
-      <DependentUpon>SegmentDrawForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ToolbarForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ToolbarForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

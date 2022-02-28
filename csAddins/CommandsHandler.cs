@@ -12,10 +12,5 @@ namespace csAddins
         {
             MyAddin.app.CommandState.StartPrimitive(new DynamicLineDraw());
         }
-
-        public static void DrawLineSegmentTest(string unparsed)
-        {
-            MyAddin.app.CommandState.StartPrimitive(new SegmentDraw());
-        }
     }
 }

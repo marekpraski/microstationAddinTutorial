@@ -40,9 +40,17 @@ namespace csAddins
         {
             removeLastPoint();
             Element elem = app.CreateLineElement1(null, ref linestringPoints);
-            app.ActiveModelReference.AddElement(elem);
+            string s = "hello world!";
+			DataBlock dtb = new DataBlockClass();
+            dtb.CopyString(ref s, true);
+            elem.AddUserAttributeData(123, dtb);    //przekazany tekst zapisywany jest w elemencie w Linkages
 
-            userClicked = 0;
+			//app.ActiveModelReference.AddElement(elem);
+
+            //nie dodaję tego elementu do dgn tylko wyświetlam go tymczasowo; taki element jest niezaznaczalny i znika po ponownym uruchomieniu funkcji
+            app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
+
+			userClicked = 0;
             this.linestringPoints = new Point3d[2];
             app.CommandState.StartPrimitive(this, false);
         }
@@ -73,6 +81,10 @@ namespace csAddins
         {
             if (el == null)
                 return false;
+
+            DataBlock[] db = el.GetUserAttributeData(123);
+            string s = "";
+            db[0].CopyString(ref s, false); //odczytuję tekst, jest ""hello world!", tak jak przypisałem podczas tworzenia elementu
             DatabaseLink[] links = el.GetDatabaseLinks(MsdDatabaseLinkage.Odbc);
             return links.Length > 0;
         }

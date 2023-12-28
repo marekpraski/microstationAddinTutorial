@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using Bentley.Interop.MicroStationDGN;
 
 namespace csAddins
@@ -11,6 +8,7 @@ namespace csAddins
         private Application app = MyAddin.app;
         private Point3d[] linestringPoints = new Point3d[2];
         private int userClicked = 0;
+
         #region metody implementujące IPrimitiveCommandEvents
         public void Keyin(string Keyin)
         {
@@ -23,7 +21,8 @@ namespace csAddins
             {
                 //zaczynając rysować, jeżeli zasnapuję się do elementu, mogę odczytać link
                 Element el = MyAddin.app.CommandState.LocateElement(Point, View, true);
-                bool hasLinks = checkLinksExist(el); 
+                bool hasLinks = checkLinksExist(el);
+
                 app.CommandState.StartDynamics();
                 linestringPoints[0] = Point;
             }
@@ -36,7 +35,8 @@ namespace csAddins
             userClicked++;
         }
 
-        public void Reset()
+
+		public void Reset()
         {
             removeLastPoint();
             Element elem = app.CreateLineElement1(null, ref linestringPoints);
@@ -45,10 +45,10 @@ namespace csAddins
             dtb.CopyString(ref s, true);
             elem.AddUserAttributeData(123, dtb);    //przekazany tekst zapisywany jest w elemencie w Linkages
 
-			//app.ActiveModelReference.AddElement(elem);
+			app.ActiveModelReference.AddElement(elem);
 
             //nie dodaję tego elementu do dgn tylko wyświetlam go tymczasowo; taki element jest niezaznaczalny i znika po ponownym uruchomieniu funkcji
-            app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
+            //app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
 
 			userClicked = 0;
             this.linestringPoints = new Point3d[2];
@@ -64,6 +64,7 @@ namespace csAddins
         {
             if (userClicked == 0)
                 return;
+
             linestringPoints[userClicked] = Point;
 
             Element elem = app.CreateLineElement1(null, ref linestringPoints);
@@ -84,7 +85,8 @@ namespace csAddins
 
             DataBlock[] db = el.GetUserAttributeData(123);
             string s = "";
-            db[0].CopyString(ref s, false); //odczytuję tekst, jest ""hello world!", tak jak przypisałem podczas tworzenia elementu
+            if(db != null && db.Length> 0)
+                db[0].CopyString(ref s, false); //odczytuję tekst, jest ""hello world!", tak jak przypisałem podczas tworzenia elementu
             DatabaseLink[] links = el.GetDatabaseLinks(MsdDatabaseLinkage.Odbc);
             return links.Length > 0;
         }
@@ -109,5 +111,5 @@ namespace csAddins
             this.linestringPoints = newLinestringPoints;
         }
 
-    }
+	}
 }

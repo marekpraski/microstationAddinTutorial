@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="CommandsHandler.cs" />
     <Compile Include="CreateElement.cs" />
+    <Compile Include="DrawLineOnLine.cs" />
     <Compile Include="DynamicLineDraw.cs" />
     <Compile Include="MyAddin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

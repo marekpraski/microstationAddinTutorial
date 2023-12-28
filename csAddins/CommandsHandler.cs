@@ -8,9 +8,13 @@ namespace csAddins
 {
     public class CommandsHandler
     {
-        public static void DrawLineTest(string unparsed)
+        public static void DrawLine(string unparsed)
         {
             MyAddin.app.CommandState.StartPrimitive(new DynamicLineDraw());
         }
-    }
+		public static void DrawOnLine(string unparsed)
+		{
+			MyAddin.app.CommandState.StartPrimitive(new DrawLineOnLine());
+		}
+	}
 }

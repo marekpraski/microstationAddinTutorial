@@ -18,6 +18,7 @@
 		</KeyinTable>
 		<KeyinTable ID="DemoForm">
 			<Keyword CommandWord="DrawLine"/>
+      <Keyword CommandWord="DrawOnLine"/>
 		</KeyinTable>
 	</SubKeyinTables>
 
@@ -25,6 +26,8 @@
 		<KeyinHandler Keyin="CreateElement PatternedShape"
 			Function="csAddins.CreateElement.createPatternedArea"/>
 		<KeyinHandler Keyin="DemoForm DrawLine"
-				Function="csAddins.CommandsHandler.DrawLineTest"/>
+				Function="csAddins.CommandsHandler.DrawLine"/>
+    <KeyinHandler Keyin="DemoForm DrawOnLine"
+			Function="csAddins.CommandsHandler.DrawOnLine"/>
 	</KeyinHandlers>
 </KeyinTree>

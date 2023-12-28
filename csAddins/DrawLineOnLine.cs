@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 
 namespace csAddins
 {
@@ -10,9 +10,11 @@ namespace csAddins
 	{
 		private Application app = MyAddin.app;
 		private Point3d[] linestringPoints = new Point3d[2];
-		private int userClicked = 0;
+		private bool userClicked = false;
 		private double accuracy = 0.0001;
-		private Element selectedLine = null;
+		private LineElement selectedLine = null;
+
+		private List<Segment3d> lineSegments = new List<Segment3d>();
 		#region metody implementujące IPrimitiveCommandEvents
 		public void Keyin(string Keyin)
 		{
@@ -21,42 +23,46 @@ namespace csAddins
 
 		public void DataPoint(ref Point3d Point, View View)
 		{
-			if (userClicked == 0)
+			if (!userClicked)
 			{
 				//zaczynając rysować, jeżeli zasnapuję się do elementu, mogę odczytać link
 				Element el = MyAddin.app.CommandState.LocateElement(Point, View, true);
+				if (!setSelectedLine(el))
+					return;
 				bool hasLinks = checkLinksExist(el);
-				selectedLine = el;
-				Point = drapePointOnLine(selectedLine, Point);
+				int index = getNearestSegmentIndex(selectedLine, Point);
+				lineSegments.Add(selectedLine.Segment[index]);
+				Point = drapePointOnLineSegment(selectedLine.Segment[index], Point);
 				app.CommandState.StartDynamics();
 				linestringPoints[0] = Point;
+				userClicked = true;
 			}
 			else
-			{
-				this.linestringPoints[userClicked] = Point;
-				expandPointsArray();
-				Dynamics(ref Point, View, MsdDrawingMode.Normal);
-			}
-			userClicked++;
+				constructLine();
 		}
 
-
-		public void Reset()
+		private void constructLine()
 		{
-			removeLastPoint();
 			Element elem = app.CreateLineElement1(null, ref linestringPoints);
 			string s = "hello world!";
 			DataBlock dtb = new DataBlockClass();
 			dtb.CopyString(ref s, true);
 			elem.AddUserAttributeData(123, dtb);    //przekazany tekst zapisywany jest w elemencie w Linkages
 
-			//app.ActiveModelReference.AddElement(elem);
+			app.ActiveModelReference.AddElement(elem);
 
 			//nie dodaję tego elementu do dgn tylko wyświetlam go tymczasowo; taki element jest niezaznaczalny i znika po ponownym uruchomieniu funkcji
-			app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
+			//app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
 
-			userClicked = 0;
+			Reset();
+		}
+
+		public void Reset()
+		{
+			userClicked = false;
 			this.linestringPoints = new Point3d[2];
+			this.lineSegments.Clear();
+			this.selectedLine = null;
 			app.CommandState.StartPrimitive(this, false);
 		}
 
@@ -67,14 +73,61 @@ namespace csAddins
 
 		public void Dynamics(ref Point3d Point, View View, MsdDrawingMode DrawMode)
 		{
-			if (userClicked == 0)
+			if (!userClicked)
 				return;
 
-			Point = drapePointOnLine(selectedLine, Point);
-			linestringPoints[userClicked] = Point;
+			int index = getNearestSegmentIndex(selectedLine, Point);
+			if (index == 0)		//indeksy w obiektach Bentley zaczynają się od 1
+				return;
+
+			if (!segmentsAreEqual(selectedLine.Segment[index], lineSegments.Last()))      //przeskoczył do innego segmentu linii;
+				modifyLinestingPointsArray(index);
+
+			Point = drapePointOnLineSegment(selectedLine.Segment[index], Point);
+			linestringPoints[linestringPoints.Length - 1] = Point;
 
 			Element elem = app.CreateLineElement1(null, ref linestringPoints);
 			elem.Redraw(DrawMode);
+		}
+
+		private void modifyLinestingPointsArray(int index)
+		{
+			Point3d p = getSharedPoint(selectedLine.Segment[index], lineSegments.Last());
+			if (linestringPoints.Length == 2)      //przeskoczył do kolejnego segmentu linii po raz pierwszy
+			{
+				expandPointsArray();
+				linestringPoints[linestringPoints.Length - 2] = p;
+				lineSegments.Add(selectedLine.Segment[index]);
+			}
+			else if (linestringPoints.Length > 2 && !pointsAreEqual(p, linestringPoints[linestringPoints.Length - 2]))      //przeskoczył do kolejnego segmentu linii; porównuję z przedostatnim, bo to jest werteks linii
+			{
+				expandPointsArray();
+				linestringPoints[linestringPoints.Length - 2] = p;
+				lineSegments.Add(selectedLine.Segment[index]);
+			}
+			else if (linestringPoints.Length > 2 && pointsAreEqual(p, linestringPoints[linestringPoints.Length - 2]))     //wrócił do poprzedniego segmentu linii; porównuję z przedostatnim, bo to jest werteks linii
+			{
+				contractPointsArray();
+				lineSegments.RemoveAt(lineSegments.Count - 1);
+			}
+		}
+
+		private Point3d getSharedPoint(Segment3d segmentOne, Segment3d segmentTwo)
+		{
+			if (pointsAreEqual(segmentOne.EndPoint, segmentTwo.StartPoint))
+				return segmentOne.EndPoint;
+			
+			return segmentTwo.EndPoint;
+		}
+
+		private bool segmentsAreEqual(Segment3d segmentOne, Segment3d segmentTwo)
+		{
+			return pointsAreEqual(segmentOne.StartPoint, segmentTwo.StartPoint) && pointsAreEqual(segmentOne.EndPoint, segmentTwo.EndPoint); ;
+		}
+
+		private bool pointsAreEqual(Point3d p1, Point3d p2)
+		{
+			return Math.Abs(p1.X - p2.X) < accuracy && Math.Abs(p1.Y - p2.Y) < accuracy;
 		}
 
 		public void Start()
@@ -83,6 +136,16 @@ namespace csAddins
 		}
 
 		#endregion
+
+		private bool setSelectedLine(Element el)
+		{
+			if (el.IsLineElement())
+			{
+				selectedLine = el.AsLineElement();
+				return true;
+			}
+			return false;
+		}
 
 		private bool checkLinksExist(Element el)
 		{
@@ -97,9 +160,10 @@ namespace csAddins
 			return links.Length > 0;
 		}
 
+
 		private void expandPointsArray()
 		{
-			Point3d[] newLinestringPoints = new Point3d[2 + userClicked];
+			Point3d[] newLinestringPoints = new Point3d[linestringPoints.Length + 1];
 			for (int i = 0; i < this.linestringPoints.Length; i++)
 			{
 				newLinestringPoints[i] = linestringPoints[i];
@@ -107,21 +171,45 @@ namespace csAddins
 			this.linestringPoints = newLinestringPoints;
 		}
 
-		private void removeLastPoint()
+		private void contractPointsArray()
 		{
-			Point3d[] newLinestringPoints = new Point3d[this.linestringPoints.Length - 1];
+			Point3d[] newLinestringPoints = new Point3d[linestringPoints.Length - 1];
 			for (int i = 0; i < newLinestringPoints.Length; i++)
 			{
-				newLinestringPoints[i] = this.linestringPoints[i];
+				newLinestringPoints[i] = linestringPoints[i];
 			}
 			this.linestringPoints = newLinestringPoints;
 		}
 
-		private Point3d drapePointOnLine(Element el, Point3d point)
+		private Point3d drapePointOnLineSegment(Segment3d lineSegment, Point3d p)
 		{
-			LineElement lineEl = el.AsLineElement();
-			LineElement segment = getNearestSegment(lineEl);
-			return getPerpendicular(point, segment);
+			if (Math.Abs(lineSegment.EndPoint.X - lineSegment.StartPoint.X) < accuracy) //ta linia jest pionowa
+				return app.Point3dFromXY(lineSegment.StartPoint.X, p.Y);
+			else if (Math.Abs(lineSegment.EndPoint.Y - lineSegment.StartPoint.Y) < accuracy) //ta linia jest pozioma
+				return app.Point3dFromXY(p.X, lineSegment.StartPoint.Y);
+
+			//określam linię wzorem y = ax + b
+			double a = (lineSegment.EndPoint.Y - lineSegment.StartPoint.Y) / (lineSegment.EndPoint.X - lineSegment.StartPoint.X);
+			double b = lineSegment.StartPoint.Y - a * lineSegment.StartPoint.X;
+
+			double ap = -1 / a;     //współczynnik kierunkowy linii prostopadłej
+			double bp = p.Y - ap * p.X;     //współczynnik b linii prostopadłej
+
+			double x = (bp - b) / (a - ap);
+			double y = a * x + b;
+			return app.Point3dFromXY(x, y);   //punkt przecięcia tej linii z linią prostopadłą przechodzącą przez przekazany punkt
+		}
+
+		private int getNearestSegmentIndex(LineElement lineEl, Point3d point)
+		{
+			for (int i = 0; i < lineEl.SegmentsCount; i++)
+			{
+				Segment3d s = lineEl.Segment[i + 1];
+				Point3d p = drapePointOnLineSegment(s,point);
+				if (isPointOnSegment(s, p))
+					return i + 1;
+			}
+			return 0;
 		}
 
 		/// <summary>
@@ -137,28 +225,23 @@ namespace csAddins
 			return app.CreateLineElement1(null, ref verts);
 		}
 
-		/// <summary>
-		/// zwraca linię prostopadłą przechodzącą przez zadany punkt, który nie leży na tej linii; pierwszy punkt zwracanej linii prostopadłej jest punktem przekazanym,
-		/// drugi punkt leży na tej linii, na której wykonywana jest metoda
-		/// </summary>
-		public Point3d getPerpendicular(Point3d p, LineElement line)
+		private double getDistanceBetweenPoints(Point3d p1, Point3d p2)
 		{
+			double a = (p1.X - p2.X) * (p1.X - p2.X);
+			double b = (p1.Y - p2.Y) * (p1.Y - p2.Y);
+			double c = a + b;
 
-			if (Math.Abs(line.EndPoint.X - line.StartPoint.X) < accuracy) //ta linia jest pionowa
-				return app.Point3dFromXY(line.StartPoint.X, p.Y);
-			else if (Math.Abs(line.EndPoint.Y - line.StartPoint.Y) < accuracy) //ta linia jest pozioma
-				return app.Point3dFromXY(p.X, line.StartPoint.Y);
+			return Math.Sqrt(c);
+		}
 
-			//określam linię wzorem y = ax + b
-			double a = (line.EndPoint.Y - line.StartPoint.Y) / (line.EndPoint.X - line.StartPoint.X);
-			double b = line.StartPoint.Y - a * line.StartPoint.X;
 
-			double ap = -1 / a;     //współczynnik kierunkowy linii prostopadłej
-			double bp = p.Y - ap * p.X;     //współczynnik b linii prostopadłej
-
-			double x = (bp - b) / (a - ap);
-			double y = a * x + b;
-			return app.Point3dFromXY(x, y);   //punkt przecięcia tej linii z linią prostopadłą przechodzącą przez przekazany punkt
+		public bool isPointOnSegment(Segment3d lineSegment, Point3d p)
+		{
+			//punkt X leży na odcinku AB jeżeli suma długości odcinków AX + XB jest równa długości odcinka AB
+			double segmentLength = getDistanceBetweenPoints(lineSegment.StartPoint, lineSegment.EndPoint);
+			double dist1 = getDistanceBetweenPoints(p, lineSegment.StartPoint);
+			double dist2 = getDistanceBetweenPoints(p, lineSegment.EndPoint);
+			return (Math.Abs(dist1 + dist2 - segmentLength) < accuracy);
 		}
 
 	}

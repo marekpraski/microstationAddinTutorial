@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace csAddins
 {
@@ -202,28 +201,25 @@ namespace csAddins
 
 		private int getNearestSegmentIndex(LineElement lineEl, Point3d point)
 		{
+			int index = 0;
+			double distance = Double.PositiveInfinity;
 			for (int i = 0; i < lineEl.SegmentsCount; i++)
 			{
 				Segment3d s = lineEl.Segment[i + 1];
 				Point3d p = drapePointOnLineSegment(s,point);
 				if (isPointOnSegment(s, p))
-					return i + 1;
+				{
+					double d = getDistanceBetweenPoints(p, point);
+					if (d < distance) 
+					{
+						index = i + 1;
+						distance = d;
+					}
+				}
 			}
-			return 0;
+			return index;
 		}
 
-		/// <summary>
-		/// chwilowo do testów zwraca pierwszy
-		/// </summary>
-		/// <param name="lineEl"></param>
-		/// <returns></returns>
-		private LineElement getNearestSegment(LineElement lineEl)
-		{
-			Point3d[] verts = new Point3d[2];
-			verts[0] = lineEl.Segment[1].StartPoint;
-			verts[1] = lineEl.Segment[1].EndPoint;
-			return app.CreateLineElement1(null, ref verts);
-		}
 
 		private double getDistanceBetweenPoints(Point3d p1, Point3d p2)
 		{

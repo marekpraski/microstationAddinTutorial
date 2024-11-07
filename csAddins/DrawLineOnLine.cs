@@ -40,22 +40,6 @@ namespace csAddins
 				constructLine();
 		}
 
-		private void constructLine()
-		{
-			Element elem = app.CreateLineElement1(null, ref linestringPoints);
-			string s = "hello world!";
-			DataBlock dtb = new DataBlockClass();
-			dtb.CopyString(ref s, true);
-			elem.AddUserAttributeData(123, dtb);    //przekazany tekst zapisywany jest w elemencie w Linkages
-
-			app.ActiveModelReference.AddElement(elem);
-
-			//nie dodaję tego elementu do dgn tylko wyświetlam go tymczasowo; taki element jest niezaznaczalny i znika po ponownym uruchomieniu funkcji
-			//app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
-
-			Reset();
-		}
-
 		public void Reset()
 		{
 			userClicked = false;
@@ -89,6 +73,29 @@ namespace csAddins
 			elem.Redraw(DrawMode);
 		}
 
+		public void Start()
+		{
+			app.CommandState.EnableAccuSnap();
+		}
+
+		#endregion
+
+		private void constructLine()
+		{
+			Element elem = app.CreateLineElement1(null, ref linestringPoints);
+			string s = "hello world!";
+			DataBlock dtb = new DataBlockClass();
+			dtb.CopyString(ref s, true);
+			elem.AddUserAttributeData(123, dtb);    //przekazany tekst zapisywany jest w elemencie w Linkages
+
+			app.ActiveModelReference.AddElement(elem);
+
+			//nie dodaję tego elementu do dgn tylko wyświetlam go tymczasowo; taki element jest niezaznaczalny i znika po ponownym uruchomieniu funkcji
+			//app.CreateTransientElementContainer1(elem, MsdTransientFlags.Overlay, MsdViewMask.AllViews, MsdDrawingMode.Temporary);
+
+			Reset();
+		}
+
 		private void modifyLinestingPointsArray(int index)
 		{
 			Point3d p = getSharedPoint(selectedLine.Segment[index], lineSegments.Last());
@@ -115,7 +122,7 @@ namespace csAddins
 		{
 			if (pointsAreEqual(segmentOne.EndPoint, segmentTwo.StartPoint))
 				return segmentOne.EndPoint;
-			
+
 			return segmentTwo.EndPoint;
 		}
 
@@ -128,13 +135,6 @@ namespace csAddins
 		{
 			return Math.Abs(p1.X - p2.X) < accuracy && Math.Abs(p1.Y - p2.Y) < accuracy;
 		}
-
-		public void Start()
-		{
-			app.CommandState.EnableAccuSnap();
-		}
-
-		#endregion
 
 		private bool setSelectedLine(Element el)
 		{
@@ -220,7 +220,6 @@ namespace csAddins
 			return index;
 		}
 
-
 		private double getDistanceBetweenPoints(Point3d p1, Point3d p2)
 		{
 			double a = (p1.X - p2.X) * (p1.X - p2.X);
@@ -229,7 +228,6 @@ namespace csAddins
 
 			return Math.Sqrt(c);
 		}
-
 
 		public bool isPointOnSegment(Segment3d lineSegment, Point3d p)
 		{

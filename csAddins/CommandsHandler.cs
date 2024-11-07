@@ -16,5 +16,9 @@ namespace csAddins
 		{
 			MyAddin.app.CommandState.StartPrimitive(new DrawLineOnLine());
 		}
+		public static void ShowLinkages(string unparsed)
+		{
+			new ShowTransient().showLinkages();
+		}
 	}
 }

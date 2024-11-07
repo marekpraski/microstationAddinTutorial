@@ -19,6 +19,7 @@
 		<KeyinTable ID="DemoForm">
 			<Keyword CommandWord="DrawLine"/>
       <Keyword CommandWord="DrawOnLine"/>
+      <Keyword CommandWord="ShowLinkages"/>
 		</KeyinTable>
 	</SubKeyinTables>
 
@@ -29,5 +30,7 @@
 				Function="csAddins.CommandsHandler.DrawLine"/>
     <KeyinHandler Keyin="DemoForm DrawOnLine"
 			Function="csAddins.CommandsHandler.DrawOnLine"/>
+    <KeyinHandler Keyin="DemoForm ShowLinkages"
+  Function="csAddins.CommandsHandler.ShowLinkages"/>
 	</KeyinHandlers>
 </KeyinTree>
